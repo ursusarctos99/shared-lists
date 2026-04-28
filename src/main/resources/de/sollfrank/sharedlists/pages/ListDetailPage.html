@@ -1,0 +1,69 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:extend>
+
+    <!-- Header -->
+    <div class="flex items-start justify-between mb-8">
+        <div>
+            <a wicket:id="backLink" class="btn btn-ghost btn-sm mb-3 -ml-2">
+                ← <wicket:message key="back"/>
+            </a>
+            <h2 class="text-2xl font-bold" wicket:id="listTitle">List Title</h2>
+            <p class="text-base-content/60 mt-1" wicket:id="listDescription">Description</p>
+        </div>
+        <button class="btn btn-primary mt-8"
+                onclick="document.getElementById('addEntryModal').showModal()">
+            <wicket:message key="entry.add"/>
+        </button>
+    </div>
+
+    <!-- Entries list -->
+    <form wicket:id="entriesForm">
+        <div wicket:id="entriesContainer" class="flex flex-col gap-2">
+            <div wicket:id="entryList"
+                 class="flex items-center gap-3 px-4 py-3 rounded-xl bg-base-200 hover:bg-base-300 transition-colors group">
+                <input type="checkbox" wicket:id="done" class="checkbox checkbox-primary"/>
+                <span class="flex-1 font-medium" wicket:id="entryTitle">Entry title</span>
+                <a wicket:id="url" target="_blank" rel="noopener noreferrer"
+                   class="btn btn-ghost btn-xs opacity-0 group-hover:opacity-100 transition-opacity">↗</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Empty state -->
+
+    <!-- Add Entry Modal -->
+    <dialog id="addEntryModal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4"><wicket:message key="modal.add.title"/></h3>
+            <form wicket:id="addEntryForm">
+                <div wicket:id="feedback" class="alert alert-error mb-3 text-sm"></div>
+                <div class="form-control mb-3">
+                    <label class="label">
+                        <span class="label-text"><wicket:message key="form.title"/></span>
+                    </label>
+                    <input type="text" wicket:id="title" class="input input-bordered w-full"/>
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text"><wicket:message key="form.url"/></span>
+                    </label>
+                    <input type="text" wicket:id="url" class="input input-bordered w-full"/>
+                </div>
+                <div class="modal-action">
+                    <button type="button" class="btn"
+                            onclick="document.getElementById('addEntryModal').close()">
+                        <wicket:message key="form.cancel"/>
+                    </button>
+                    <a wicket:id="submit" class="btn btn-primary">
+                        <wicket:message key="form.add"/>
+                    </a>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+</wicket:extend>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+    <div class="flex items-center justify-between gap-4 mt-6">
+
+        <span class="text-sm text-base-content/60" wicket:id="perPage">9 per page</span>
+
+        <div class="join">
+            <a wicket:id="first" class="join-item btn btn-sm">«</a>
+            <a wicket:id="prev"  class="join-item btn btn-sm">‹</a>
+            <span class="join-item btn btn-sm btn-ghost pointer-events-none">
+                <span wicket:id="pageInfo">Page 1 of 1</span>
+            </span>
+            <a wicket:id="next" class="join-item btn btn-sm">›</a>
+            <a wicket:id="last" class="join-item btn btn-sm">»</a>
+        </div>
+
+    </div>
+</wicket:panel>
+</body>
+</html>

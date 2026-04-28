@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: shared-lists
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sharedlists
+    username: sharedlists
+    password: sharedlists
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_CLIENT_ID:shared-lists}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET:change-me}
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:9090/realms/shared-lists}
+            user-name-attribute: preferred_username

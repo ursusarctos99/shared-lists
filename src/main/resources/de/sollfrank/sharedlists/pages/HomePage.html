@@ -1,0 +1,68 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:extend>
+
+    <!-- Page header -->
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold" wicket:id="heading">Welcome!</h2>
+        <button class="btn btn-primary"
+                onclick="document.getElementById('createListModal').showModal()">
+            <wicket:message key="list.add"/>
+        </button>
+    </div>
+
+    <!-- Card grid -->
+    <div wicket:id="listContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div wicket:id="listView" class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+            <a wicket:id="detailLink" class="card-body block hover:no-underline">
+                <h3 class="card-title" wicket:id="title">Title</h3>
+                <p class="text-sm text-base-content/70 flex-1" wicket:id="description">Description</p>
+                <div class="flex items-center justify-end gap-1 mt-2">
+                    <span class="badge badge-neutral" wicket:id="entryCount">0</span>
+                    <span class="text-xs text-base-content/50">
+                        <wicket:message key="card.items"/>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Pager -->
+    <div wicket:id="pager"></div>
+
+    <!-- Create List Modal -->
+    <dialog id="createListModal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4"><wicket:message key="modal.create.title"/></h3>
+            <form wicket:id="createForm">
+                <div wicket:id="feedback" class="alert alert-error mb-3 text-sm"></div>
+                <div class="form-control mb-3">
+                    <label class="label">
+                        <span class="label-text"><wicket:message key="form.title"/></span>
+                    </label>
+                    <input type="text" wicket:id="title" class="input input-bordered w-full"/>
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text"><wicket:message key="form.description"/></span>
+                    </label>
+                    <textarea wicket:id="description"
+                              class="textarea textarea-bordered w-full" rows="3"></textarea>
+                </div>
+                <div class="modal-action">
+                    <button type="button" class="btn"
+                            onclick="document.getElementById('createListModal').close()">
+                        <wicket:message key="form.cancel"/>
+                    </button>
+                    <a wicket:id="submit" class="btn btn-primary">
+                        <wicket:message key="form.create"/>
+                    </a>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+</wicket:extend>
+</body>
+</html>
