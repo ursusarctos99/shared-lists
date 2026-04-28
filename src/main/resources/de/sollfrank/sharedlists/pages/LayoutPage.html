@@ -8,23 +8,30 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-base-100">
+<body class="min-h-screen bg-gradient-to-br from-violet-50 via-white to-pink-50">
 
 <div class="flex flex-col min-h-screen">
 
-    <nav class="navbar bg-base-100 border-b border-base-200 sticky top-0 z-10 px-4">
+    <nav class="navbar bg-white/75 backdrop-blur-xl border-b border-white/60
+                shadow-[0_2px_24px_rgba(0,0,0,0.07)] sticky top-0 z-30 px-6">
         <div class="navbar-start">
-            <span class="text-xl font-bold">Shared Lists</span>
+            <span class="text-xl font-extrabold tracking-tight
+                         bg-gradient-to-r from-violet-600 to-pink-500
+                         bg-clip-text text-transparent">
+                Shared Lists
+            </span>
         </div>
         <div class="navbar-center">
             <form wicket:id="searchForm">
                 <div class="join">
                     <input type="text" wicket:id="searchInput"
-                           class="input input-bordered join-item w-64"
+                           class="input join-item w-64 bg-white/80 border-base-200
+                                  focus:bg-white focus:outline-none"
                            wicket:message="placeholder:search.placeholder"/>
-                    <button type="submit" class="btn btn-square join-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
+                    <button type="submit"
+                            class="btn btn-square join-item bg-white/80 border-base-200 hover:bg-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/40"
+                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/>
                         </svg>
@@ -33,7 +40,9 @@
             </form>
         </div>
         <div class="navbar-end">
-            <a wicket:id="settingsLink" class="btn btn-ghost btn-square"
+            <a wicket:id="settingsLink"
+               class="btn btn-ghost btn-square text-base-content/40
+                      hover:text-base-content hover:bg-white/60 rounded-xl"
                wicket:message="aria-label:settings.label">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                      viewBox="0 0 24 24" stroke="currentColor">
@@ -46,10 +55,10 @@
         </div>
     </nav>
 
-    <main class="flex-1 p-6">
+    <main class="flex-1 p-8 max-w-7xl mx-auto w-full">
         <wicket:child/>
     </main>
-</div>
 
+</div>
 </body>
 </html>

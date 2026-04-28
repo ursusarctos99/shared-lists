@@ -2,18 +2,19 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <div class="flex items-center justify-between gap-4 mt-6">
+    <div class="flex items-center justify-between gap-4 mt-8">
 
-        <span class="text-sm text-base-content/60" wicket:id="perPage">9 per page</span>
+        <span class="text-sm font-medium text-base-content/40" wicket:id="perPage">9 per page</span>
 
-        <div class="join">
-            <a wicket:id="first" class="join-item btn btn-sm">«</a>
-            <a wicket:id="prev"  class="join-item btn btn-sm">‹</a>
-            <span class="join-item btn btn-sm btn-ghost pointer-events-none">
+        <div class="join rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/[0.06]">
+            <a wicket:id="first" class="join-item btn btn-sm btn-ghost font-bold text-base-content/50 hover:text-base-content">«</a>
+            <a wicket:id="prev"  class="join-item btn btn-sm btn-ghost font-bold text-base-content/50 hover:text-base-content">‹</a>
+            <span class="join-item btn btn-sm pointer-events-none border-0 min-w-32
+                         bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold">
                 <span wicket:id="pageInfo">Page 1 of 1</span>
             </span>
-            <a wicket:id="next" class="join-item btn btn-sm">›</a>
-            <a wicket:id="last" class="join-item btn btn-sm">»</a>
+            <a wicket:id="next" class="join-item btn btn-sm btn-ghost font-bold text-base-content/50 hover:text-base-content">›</a>
+            <a wicket:id="last" class="join-item btn btn-sm btn-ghost font-bold text-base-content/50 hover:text-base-content">»</a>
         </div>
 
     </div>

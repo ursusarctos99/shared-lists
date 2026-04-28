@@ -7,6 +7,7 @@ import de.sollfrank.sharedlists.model.forms.SharedListForm;
 import de.sollfrank.sharedlists.services.SharedListService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -33,6 +34,15 @@ public class HomePage extends LayoutPage {
 
     private static final int ITEMS_PER_PAGE = 9;
 
+    private static final String[] CARD_GRADIENTS = {
+        "bg-gradient-to-br from-violet-500 to-indigo-700",
+        "bg-gradient-to-br from-pink-500 to-rose-600",
+        "bg-gradient-to-br from-amber-400 to-orange-600",
+        "bg-gradient-to-br from-emerald-400 to-teal-600",
+        "bg-gradient-to-br from-sky-400 to-blue-600",
+        "bg-gradient-to-br from-fuchsia-400 to-purple-600",
+    };
+
     @SpringBean
     private SharedListService sharedListService;
 
@@ -56,6 +66,9 @@ public class HomePage extends LayoutPage {
             @Override
             protected void populateItem(Item<SharedListSummary> item) {
                 SharedListSummary s = item.getModelObject();
+
+                item.add(new AttributeAppender("class",
+                        " " + CARD_GRADIENTS[item.getIndex() % CARD_GRADIENTS.length]));
 
                 PageParameters params = new PageParameters();
                 params.set("id", s.id().toString());
