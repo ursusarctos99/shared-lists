@@ -27,6 +27,7 @@ public class WicketApplication extends WebApplication {
     @Override
     public void init() {
         super.init();
+        getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
         getCspSettings().blocking().disabled();
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         mountPage("/lists/${id}", ListDetailPage.class);

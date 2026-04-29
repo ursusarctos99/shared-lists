@@ -6,6 +6,7 @@ import de.sollfrank.sharedlists.model.dto.SharedListSummary;
 import de.sollfrank.sharedlists.model.forms.SharedListForm;
 import de.sollfrank.sharedlists.services.SharedListService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -46,6 +47,9 @@ public class HomePage extends LayoutPage {
     @SpringBean
     private SharedListService sharedListService;
 
+    private WebMarkupContainer listContainer;
+    private DaisyPagingNavigator pager;
+
     public HomePage(final PageParameters parameters) {
         super(parameters);
 
@@ -58,7 +62,7 @@ public class HomePage extends LayoutPage {
 
         add(new Label("heading", new StringResourceModel("heading", this).setParameters(displayName)));
 
-        WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+        listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupId(true);
 
         DataView<SharedListSummary> listView = new DataView<>("listView",
@@ -78,13 +82,22 @@ public class HomePage extends LayoutPage {
                 link.add(new Label("description", s.description() != null ? s.description() : ""));
                 link.add(new Label("entryCount", s.entryCount()));
                 item.add(link);
+
+                UUID listId = s.id();
+                item.add(new AjaxLink<Void>("deleteListLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        sharedListService.deleteList(listId);
+                        target.add(listContainer, pager);
+                    }
+                });
             }
         };
         listView.setItemsPerPage(ITEMS_PER_PAGE);
         listContainer.add(listView);
         add(listContainer);
 
-        DaisyPagingNavigator pager = new DaisyPagingNavigator("pager", listView, listContainer, ITEMS_PER_PAGE);
+        pager = new DaisyPagingNavigator("pager", listView, listContainer, ITEMS_PER_PAGE);
         add(pager);
 
         // Create form

@@ -7,6 +7,7 @@ import de.sollfrank.sharedlists.services.ListEntryService;
 import de.sollfrank.sharedlists.services.SharedListService;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -93,6 +94,15 @@ public class ListDetailPage extends LayoutPage {
                         entry.getUrl() != null ? entry.getUrl() : "");
                 urlLink.setVisible(entry.getUrl() != null && !entry.getUrl().isBlank());
                 item.add(urlLink);
+
+                item.add(new AjaxLink<Void>("deleteEntryLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        listEntryService.deleteEntry(entryId);
+                        entriesModel.detach();
+                        target.add(entriesContainer);
+                    }
+                });
             }
         };
         entryList.setReuseItems(false);

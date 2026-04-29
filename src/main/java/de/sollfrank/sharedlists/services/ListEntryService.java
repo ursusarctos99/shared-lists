@@ -41,4 +41,9 @@ public class ListEntryService {
     public void setDone(UUID entryId, boolean done) {
         listEntryRepository.findById(entryId).ifPresent(e -> e.setDone(done));
     }
+
+    @Transactional
+    public void deleteEntry(UUID entryId) {
+        listEntryRepository.deleteById(entryId);
+    }
 }
