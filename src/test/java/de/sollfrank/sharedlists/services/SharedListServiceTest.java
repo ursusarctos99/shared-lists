@@ -1,6 +1,5 @@
 package de.sollfrank.sharedlists.services;
 
-import de.sollfrank.sharedlists.TestcontainersConfiguration;
 import de.sollfrank.sharedlists.model.ListEntry;
 import de.sollfrank.sharedlists.model.SharedList;
 import de.sollfrank.sharedlists.model.User;
@@ -19,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.testcontainers.utility.TestcontainersConfiguration;
 
 import java.util.Optional;
 import java.util.UUID;

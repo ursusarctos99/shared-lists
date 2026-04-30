@@ -80,9 +80,10 @@
                     <label class="label pb-1.5">
                         <span class="label-text font-semibold text-base-content/70">
                             <wicket:message key="form.title"/>
+                            <span class="text-red-500 ml-0.5">*</span>
                         </span>
                     </label>
-                    <input type="text" wicket:id="title"
+                    <input type="text" wicket:id="title" required
                            class="input input-bordered w-full rounded-xl
                                   focus:border-violet-400 focus:outline-none"/>
                 </div>

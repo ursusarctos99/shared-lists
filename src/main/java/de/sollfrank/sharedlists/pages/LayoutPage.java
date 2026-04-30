@@ -1,5 +1,7 @@
 package de.sollfrank.sharedlists.pages;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -16,6 +18,12 @@ public class LayoutPage extends WebPage {
     public LayoutPage(PageParameters parameters) {
         super(parameters);
         addComponents();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forUrl("https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"));
     }
 
     private void addComponents() {

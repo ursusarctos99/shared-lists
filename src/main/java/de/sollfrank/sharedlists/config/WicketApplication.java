@@ -5,6 +5,8 @@ import de.sollfrank.sharedlists.pages.HomePage;
 import de.sollfrank.sharedlists.pages.ListDetailPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
+import org.apache.wicket.csp.CSPDirective;
+import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -29,6 +31,14 @@ public class WicketApplication extends WebApplication {
         super.init();
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
         getCspSettings().blocking().disabled();
+                //.add(CSPDirective.STYLE_SRC, "'unsafe-inline'")
+//                .add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF)
+//                .add(CSPDirective.SCRIPT_SRC, "'unsafe-inline'")
+//                .add(CSPDirective.SCRIPT_SRC, "'unsafe-eval'")
+//                .add(CSPDirective.STYLE_SRC, "https://cdn.jsdelivr.net/npm/daisyui@5")
+//                .add(CSPDirective.STYLE_SRC, "https://cdn.jsdelivr.net/npm/daisyui@5/themes.css")
+//                .add(CSPDirective.SCRIPT_SRC, "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4")
+//                .add(CSPDirective.STYLE_SRC, "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4");
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         mountPage("/lists/${id}", ListDetailPage.class);
     }

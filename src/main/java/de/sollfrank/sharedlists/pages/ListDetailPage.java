@@ -117,7 +117,12 @@ public class ListDetailPage extends LayoutPage {
         Form<ListEntryForm> addEntryForm = new Form<>("addEntryForm",
                 new CompoundPropertyModel<>(formModel));
 
-        FeedbackPanel feedback = new FeedbackPanel("feedback");
+        FeedbackPanel feedback = new FeedbackPanel("feedback") {
+            @Override
+            public boolean isVisible() {
+                return anyMessage();
+            }
+        };
         feedback.setOutputMarkupPlaceholderTag(true);
         addEntryForm.add(feedback);
 

@@ -26,6 +26,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -42,6 +43,9 @@ public class HomePage extends LayoutPage {
         "bg-gradient-to-br from-emerald-400 to-teal-600",
         "bg-gradient-to-br from-sky-400 to-blue-600",
         "bg-gradient-to-br from-fuchsia-400 to-purple-600",
+        "bg-gradient-to-br from-lime-400 to-green-600",
+        "bg-gradient-to-br from-red-500 to-rose-700",
+        "bg-gradient-to-br from-yellow-400 to-amber-500",
     };
 
     @SpringBean
@@ -105,7 +109,12 @@ public class HomePage extends LayoutPage {
         Form<SharedListForm> createForm = new Form<>("createForm",
                 new CompoundPropertyModel<>(formModel));
 
-        FeedbackPanel feedback = new FeedbackPanel("feedback");
+        FeedbackPanel feedback = new FeedbackPanel("feedback") {
+            @Override
+            public boolean isVisible() {
+                return anyMessage();
+            }
+        };
         feedback.setOutputMarkupPlaceholderTag(true);
         createForm.add(feedback);
 
@@ -143,7 +152,7 @@ public class HomePage extends LayoutPage {
         @Override
         public Iterator<SharedListSummary> iterator(long first, long count) {
             int page = (int) (first / ITEMS_PER_PAGE);
-            return service.getPagedLists(ownerId, PageRequest.of(page, ITEMS_PER_PAGE)).iterator();
+            return service.getPagedLists(ownerId, PageRequest.of(page, ITEMS_PER_PAGE, Sort.by(Sort.Direction.ASC, "title"))).iterator();
         }
 
         @Override
