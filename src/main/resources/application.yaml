@@ -5,13 +5,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/sharedlists
     username: sharedlists
     password: sharedlists
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    driver-class-name: org.postgresql.Driver
   flyway:
     sql-migration-suffixes: .sql
-    sql-dialect: postgresql
+    driver-class-name: org.postgresql.Driver
   security:
     oauth2:
       client:
