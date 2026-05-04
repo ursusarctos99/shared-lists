@@ -3,6 +3,7 @@ package de.sollfrank.sharedlists.pages;
 import de.sollfrank.sharedlists.SharedListsSession;
 import de.sollfrank.sharedlists.SimpleUser;
 import de.sollfrank.sharedlists.model.dto.SharedListSummary;
+import de.sollfrank.sharedlists.model.forms.InviteForm;
 import de.sollfrank.sharedlists.model.forms.SharedListForm;
 import de.sollfrank.sharedlists.services.SharedListService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -53,6 +54,7 @@ public class HomePage extends LayoutPage {
 
     private WebMarkupContainer listContainer;
     private DaisyPagingNavigator pager;
+    private final IModel<UUID> selectedListId = new Model<>();
 
     public HomePage(final PageParameters parameters) {
         super(parameters);
@@ -93,6 +95,14 @@ public class HomePage extends LayoutPage {
                     public void onClick(AjaxRequestTarget target) {
                         sharedListService.deleteList(listId);
                         target.add(listContainer, pager);
+                    }
+                });
+
+                item.add(new AjaxLink<Void>("shareLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        selectedListId.setObject(listId);
+                        target.appendJavaScript("document.getElementById('shareModal').showModal()");
                     }
                 });
             }
@@ -137,6 +147,46 @@ public class HomePage extends LayoutPage {
         });
         createForm.setOutputMarkupId(true);
         add(createForm);
+
+        // Share / invite form
+        InviteForm inviteFormModel = new InviteForm();
+        Form<InviteForm> shareForm = new Form<>("shareForm",
+                new CompoundPropertyModel<>(inviteFormModel));
+
+        FeedbackPanel shareFeedback = new FeedbackPanel("shareFeedback") {
+            @Override
+            public boolean isVisible() {
+                return anyMessage();
+            }
+        };
+        shareFeedback.setOutputMarkupPlaceholderTag(true);
+        shareForm.add(shareFeedback);
+
+        shareForm.add(new TextField<String>("username").setRequired(true));
+        shareForm.add(new AjaxSubmitLink("shareSubmit", shareForm) {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                String currentDisplayName = SharedListsSession.get().getUser()
+                        .map(SimpleUser::displayName).orElse("Unknown");
+                try {
+                    sharedListService.inviteUser(selectedListId.getObject(),
+                            inviteFormModel.getUsername(), currentDisplayName);
+                    inviteFormModel.setUsername(null);
+                    target.add(shareForm);
+                    target.appendJavaScript("document.getElementById('shareModal').close()");
+                } catch (IllegalArgumentException e) {
+                    shareForm.error(getString("share.user.not.found"));
+                    target.add(shareForm);
+                }
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target) {
+                target.add(shareForm);
+            }
+        });
+        shareForm.setOutputMarkupId(true);
+        add(shareForm);
     }
 
     private static class SharedListDataProvider implements IDataProvider<SharedListSummary>, Serializable {
