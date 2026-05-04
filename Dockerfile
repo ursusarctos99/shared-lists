@@ -11,4 +11,4 @@ FROM eclipse-temurin:25-jre
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dwicket.configuration=deployment", "-jar", "app.jar"]
