@@ -2,7 +2,9 @@ package de.sollfrank.sharedlists.pages;
 
 import de.sollfrank.sharedlists.SharedListsSession;
 import de.sollfrank.sharedlists.SimpleUser;
+import de.sollfrank.sharedlists.model.ListRole;
 import de.sollfrank.sharedlists.model.dto.SharedListSummary;
+import de.sollfrank.sharedlists.model.dto.SharedWithMeSummary;
 import de.sollfrank.sharedlists.model.forms.InviteForm;
 import de.sollfrank.sharedlists.model.forms.SharedListForm;
 import de.sollfrank.sharedlists.services.SharedListService;
@@ -12,16 +14,21 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -30,7 +37,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 public class HomePage extends LayoutPage {
@@ -68,6 +77,7 @@ public class HomePage extends LayoutPage {
 
         add(new Label("heading", new StringResourceModel("heading", this).setParameters(displayName)));
 
+        // ── Owned lists ───────────────────────────────────────────────────
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupId(true);
 
@@ -114,7 +124,47 @@ public class HomePage extends LayoutPage {
         pager = new DaisyPagingNavigator("pager", listView, listContainer, ITEMS_PER_PAGE);
         add(pager);
 
-        // Create form
+        // ── Shared with me ────────────────────────────────────────────────
+        LoadableDetachableModel<List<SharedWithMeSummary>> sharedModel =
+                new LoadableDetachableModel<>() {
+                    @Override
+                    protected List<SharedWithMeSummary> load() {
+                        return ownerId != null
+                                ? sharedListService.getSharedWithMe(ownerId)
+                                : List.of();
+                    }
+                };
+
+        WebMarkupContainer sharedSection = new WebMarkupContainer("sharedSection") {
+            @Override
+            public boolean isVisible() {
+                return !sharedModel.getObject().isEmpty();
+            }
+        };
+        sharedSection.setOutputMarkupPlaceholderTag(true);
+
+        sharedSection.add(new ListView<>("sharedView", sharedModel) {
+            @Override
+            protected void populateItem(ListItem<SharedWithMeSummary> item) {
+                SharedWithMeSummary s = item.getModelObject();
+                item.add(new AttributeAppender("class",
+                        " " + CARD_GRADIENTS[item.getIndex() % CARD_GRADIENTS.length]));
+
+                PageParameters params = new PageParameters();
+                params.set("id", s.id().toString());
+                BookmarkablePageLink<Void> link = new BookmarkablePageLink<>(
+                        "sharedDetailLink", ListDetailPage.class, params);
+                link.add(new Label("sharedTitle", s.title()));
+                link.add(new Label("sharedDescription", s.description() != null ? s.description() : ""));
+                link.add(new Label("sharedEntryCount", s.entryCount()));
+                link.add(new Label("sharedRole",
+                        getString("role." + s.role().name().toLowerCase())));
+                item.add(link);
+            }
+        });
+        add(sharedSection);
+
+        // ── Create list form ──────────────────────────────────────────────
         SharedListForm formModel = new SharedListForm();
         Form<SharedListForm> createForm = new Form<>("createForm",
                 new CompoundPropertyModel<>(formModel));
@@ -148,7 +198,7 @@ public class HomePage extends LayoutPage {
         createForm.setOutputMarkupId(true);
         add(createForm);
 
-        // Share / invite form
+        // ── Share / invite form ───────────────────────────────────────────
         InviteForm inviteFormModel = new InviteForm();
         Form<InviteForm> shareForm = new Form<>("shareForm",
                 new CompoundPropertyModel<>(inviteFormModel));
@@ -163,6 +213,28 @@ public class HomePage extends LayoutPage {
         shareForm.add(shareFeedback);
 
         shareForm.add(new TextField<String>("username").setRequired(true));
+
+        List<ListRole> roleChoices = Arrays.asList(ListRole.values());
+        DropDownChoice<ListRole> roleChoice = new DropDownChoice<>("role", roleChoices,
+                new IChoiceRenderer<ListRole>() {
+                    @Override
+                    public Object getDisplayValue(ListRole role) {
+                        return HomePage.this.getString("role." + role.name().toLowerCase());
+                    }
+
+                    @Override
+                    public String getIdValue(ListRole role, int index) {
+                        return role.name();
+                    }
+
+                    @Override
+                    public ListRole getObject(String id, IModel<? extends List<? extends ListRole>> choices) {
+                        return id == null || id.isEmpty() ? null : ListRole.valueOf(id);
+                    }
+                });
+        roleChoice.setRequired(true);
+        shareForm.add(roleChoice);
+
         shareForm.add(new AjaxSubmitLink("shareSubmit", shareForm) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
@@ -170,7 +242,8 @@ public class HomePage extends LayoutPage {
                         .map(SimpleUser::displayName).orElse("Unknown");
                 try {
                     sharedListService.inviteUser(selectedListId.getObject(),
-                            inviteFormModel.getUsername(), currentDisplayName);
+                            inviteFormModel.getUsername(), currentDisplayName,
+                            inviteFormModel.getRole());
                     inviteFormModel.setUsername(null);
                     target.add(shareForm);
                     target.appendJavaScript("document.getElementById('shareModal').close()");

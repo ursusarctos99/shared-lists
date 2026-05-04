@@ -1,0 +1,92 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:extend>
+
+    <a wicket:id="backLink"
+       class="inline-flex items-center gap-1.5 text-sm font-semibold
+              text-base-content/40 hover:text-base-content
+              transition-colors duration-150 mb-8">
+        ← <wicket:message key="back"/>
+    </a>
+
+    <h2 class="text-3xl font-extrabold tracking-tight text-base-content mb-10">
+        <wicket:message key="heading"/>
+    </h2>
+
+    <div class="space-y-10 max-w-2xl">
+
+        <!-- Inbox -->
+        <section>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-base-content/40 mb-4">
+                <wicket:message key="inbox.heading"/>
+            </h3>
+            <div wicket:id="receivedContainer" class="space-y-3">
+                <div wicket:id="noReceived"
+                     class="text-center text-base-content/40 py-8 text-sm rounded-2xl
+                            bg-white/60 ring-1 ring-black/[0.04]">
+                    <wicket:message key="inbox.empty"/>
+                </div>
+                <div wicket:id="receivedList"
+                     class="flex items-center gap-4 bg-white rounded-2xl
+                            shadow-sm ring-1 ring-black/[0.05] px-5 py-4">
+                    <div class="flex-1 min-w-0">
+                        <div class="font-semibold text-base-content truncate"
+                             wicket:id="receivedListTitle">List Title</div>
+                        <div class="text-sm text-base-content/50 mt-0.5">
+                            <wicket:message key="invited.by"/>
+                            <span class="font-medium text-base-content/70"
+                                  wicket:id="receivedInvitedBy">Name</span>
+                            &nbsp;·&nbsp;
+                            <span wicket:id="receivedRole">editor</span>
+                        </div>
+                    </div>
+                    <div wicket:id="receivedActions" class="flex gap-2 shrink-0">
+                        <a wicket:id="acceptLink"
+                           class="btn btn-success btn-sm rounded-xl">
+                            <wicket:message key="action.accept"/>
+                        </a>
+                        <a wicket:id="rejectLink"
+                           class="btn btn-error btn-outline btn-sm rounded-xl">
+                            <wicket:message key="action.reject"/>
+                        </a>
+                    </div>
+                    <span wicket:id="receivedStatus" class="badge shrink-0">pending</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Outbox -->
+        <section>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-base-content/40 mb-4">
+                <wicket:message key="outbox.heading"/>
+            </h3>
+            <div wicket:id="sentContainer" class="space-y-3">
+                <div wicket:id="noSent"
+                     class="text-center text-base-content/40 py-8 text-sm rounded-2xl
+                            bg-white/60 ring-1 ring-black/[0.04]">
+                    <wicket:message key="outbox.empty"/>
+                </div>
+                <div wicket:id="sentList"
+                     class="flex items-center gap-4 bg-white rounded-2xl
+                            shadow-sm ring-1 ring-black/[0.05] px-5 py-4">
+                    <div class="flex-1 min-w-0">
+                        <div class="font-semibold text-base-content truncate"
+                             wicket:id="sentListTitle">List Title</div>
+                        <div class="text-sm text-base-content/50 mt-0.5">
+                            <wicket:message key="to"/>
+                            <span class="font-medium text-base-content/70"
+                                  wicket:id="sentInviteeEmail">email</span>
+                            &nbsp;·&nbsp;
+                            <span wicket:id="sentRole">editor</span>
+                        </div>
+                    </div>
+                    <span wicket:id="sentStatus" class="badge shrink-0">pending</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</wicket:extend>
+</body>
+</html>

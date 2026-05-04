@@ -1,12 +1,12 @@
 package de.sollfrank.sharedlists.services;
 
-import de.sollfrank.sharedlists.model.ListInvite;
-import de.sollfrank.sharedlists.model.ListRole;
-import de.sollfrank.sharedlists.model.SharedList;
-import de.sollfrank.sharedlists.model.User;
+import de.sollfrank.sharedlists.model.*;
+import de.sollfrank.sharedlists.model.dto.InviteSummary;
 import de.sollfrank.sharedlists.model.dto.SharedListSummary;
+import de.sollfrank.sharedlists.model.dto.SharedWithMeSummary;
 import de.sollfrank.sharedlists.model.forms.SharedListForm;
 import de.sollfrank.sharedlists.repositories.ListInviteRepository;
+import de.sollfrank.sharedlists.repositories.ListShareRepository;
 import de.sollfrank.sharedlists.repositories.SharedListRepository;
 import de.sollfrank.sharedlists.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,13 +27,16 @@ public class SharedListService {
     private final SharedListRepository sharedListRepository;
     private final UserRepository userRepository;
     private final ListInviteRepository listInviteRepository;
+    private final ListShareRepository listShareRepository;
 
     public SharedListService(SharedListRepository sharedListRepository,
                              UserRepository userRepository,
-                             ListInviteRepository listInviteRepository) {
+                             ListInviteRepository listInviteRepository,
+                             ListShareRepository listShareRepository) {
         this.sharedListRepository = sharedListRepository;
         this.userRepository = userRepository;
         this.listInviteRepository = listInviteRepository;
+        this.listShareRepository = listShareRepository;
     }
 
     @Transactional
@@ -56,7 +60,7 @@ public class SharedListService {
     }
 
     @Transactional
-    public void inviteUser(UUID listId, String username, String invitedByName) {
+    public void inviteUser(UUID listId, String username, String invitedByName, ListRole role) {
         User invitee = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
         SharedList list = sharedListRepository.findById(listId)
@@ -65,8 +69,42 @@ public class SharedListService {
         invite.setList(list);
         invite.setInvitedByName(invitedByName);
         invite.setInviteeEmail(invitee.getEmail());
-        invite.setRole(ListRole.EDITOR);
+        invite.setRole(role);
         invite.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS));
         listInviteRepository.save(invite);
+    }
+
+    public List<SharedWithMeSummary> getSharedWithMe(UUID userId) {
+        return sharedListRepository.findSharedWithUser(userId);
+    }
+
+    public List<InviteSummary> getSentInvites(UUID userId) {
+        return listInviteRepository.findSentSummariesByUserId(userId);
+    }
+
+    public List<InviteSummary> getReceivedInvites(String email) {
+        return listInviteRepository.findReceivedSummariesByEmail(email);
+    }
+
+    @Transactional
+    public void acceptInvite(UUID inviteId, String inviteeEmail) {
+        ListInvite invite = listInviteRepository.findById(inviteId)
+                .orElseThrow(() -> new EntityNotFoundException("Invite not found: " + inviteId));
+        User user = userRepository.findByEmail(inviteeEmail)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + inviteeEmail));
+        invite.setStatus(InviteStatus.ACCEPTED);
+        invite.setAcceptedAt(Instant.now());
+        ListShare share = new ListShare();
+        share.setList(invite.getList());
+        share.setUser(user);
+        share.setRole(invite.getRole());
+        listShareRepository.save(share);
+    }
+
+    @Transactional
+    public void rejectInvite(UUID inviteId) {
+        ListInvite invite = listInviteRepository.findById(inviteId)
+                .orElseThrow(() -> new EntityNotFoundException("Invite not found: " + inviteId));
+        invite.setStatus(InviteStatus.REJECTED);
     }
 }

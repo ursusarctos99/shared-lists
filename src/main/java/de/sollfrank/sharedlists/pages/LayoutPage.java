@@ -31,6 +31,6 @@ public class LayoutPage extends WebPage {
         searchForm.add(new TextField<>("searchInput", Model.of("")));
         add(searchForm);
 
-        add(new BookmarkablePageLink<>("settingsLink", SettingsPage.class));
+        add(new BookmarkablePageLink<>("messagesLink", MessagesPage.class));
     }
 }

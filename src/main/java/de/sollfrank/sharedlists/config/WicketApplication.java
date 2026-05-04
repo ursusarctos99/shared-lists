@@ -3,6 +3,7 @@ package de.sollfrank.sharedlists.config;
 import de.sollfrank.sharedlists.SharedListsSession;
 import de.sollfrank.sharedlists.pages.HomePage;
 import de.sollfrank.sharedlists.pages.ListDetailPage;
+import de.sollfrank.sharedlists.pages.MessagesPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.csp.CSPDirective;
@@ -41,5 +42,6 @@ public class WicketApplication extends WebApplication {
 //                .add(CSPDirective.STYLE_SRC, "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4");
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         mountPage("/lists/${id}", ListDetailPage.class);
+        mountPage("/messages", MessagesPage.class);
     }
 }

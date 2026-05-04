@@ -3,7 +3,7 @@
 <wicket:extend>
 
     <!-- Page header -->
-    <div class="flex items-center justify-between mb-10">
+    <div class="flex items-center justify-between mb-8">
         <h2 class="text-3xl font-extrabold tracking-tight text-base-content" wicket:id="heading">Welcome!</h2>
         <button class="btn btn-primary rounded-2xl px-6 font-bold
                        shadow-[0_6px_0_rgba(79,0,229,0.30)]
@@ -15,9 +15,13 @@
         </button>
     </div>
 
-    <!-- Card grid -->
+    <!-- My Lists section heading -->
+    <h3 class="text-xs font-bold uppercase tracking-widest text-base-content/40 mb-4">
+        <wicket:message key="section.owned"/>
+    </h3>
+
+    <!-- Owned card grid -->
     <div wicket:id="listContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- gradient class is injected per-item by Java -->
         <div wicket:id="listView"
              class="card relative overflow-hidden rounded-2xl cursor-pointer
                     shadow-[0_4px_20px_rgba(0,0,0,0.12)]
@@ -25,11 +29,9 @@
                     hover:-translate-y-2
                     transition-all duration-200 ease-out group">
 
-            <!-- Lighting highlight: bright top edge, simulates light from above -->
             <div class="absolute inset-x-0 top-0 h-2/5
                         bg-gradient-to-b from-white/30 to-transparent
                         pointer-events-none z-10 rounded-t-2xl"></div>
-            <!-- Depth shadow: darker bottom edge for 3D floor feel -->
             <div class="absolute inset-x-0 bottom-0 h-1/4
                         bg-gradient-to-t from-black/15 to-transparent
                         pointer-events-none z-10 rounded-b-2xl"></div>
@@ -81,6 +83,50 @@
 
     <!-- Pager -->
     <div wicket:id="pager"></div>
+
+    <!-- Shared with me section -->
+    <div wicket:id="sharedSection" class="mt-10">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-base-content/40 mb-4">
+            <wicket:message key="section.shared"/>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div wicket:id="sharedView"
+                 class="card relative overflow-hidden rounded-2xl cursor-pointer
+                        shadow-[0_4px_20px_rgba(0,0,0,0.12)]
+                        hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]
+                        hover:-translate-y-2
+                        transition-all duration-200 ease-out group">
+
+                <div class="absolute inset-x-0 top-0 h-2/5
+                            bg-gradient-to-b from-white/30 to-transparent
+                            pointer-events-none z-10 rounded-t-2xl"></div>
+                <div class="absolute inset-x-0 bottom-0 h-1/4
+                            bg-gradient-to-t from-black/15 to-transparent
+                            pointer-events-none z-10 rounded-b-2xl"></div>
+
+                <a wicket:id="sharedDetailLink"
+                   class="card-body block relative z-20 text-white hover:text-white">
+                    <h3 class="card-title text-white drop-shadow-sm mb-1 line-clamp-1"
+                        wicket:id="sharedTitle">Title</h3>
+                    <p class="text-sm text-white/65 flex-1 line-clamp-2 min-h-10"
+                       wicket:id="sharedDescription">Description</p>
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-white/15">
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-white/20 backdrop-blur-sm text-white text-xs
+                                         font-bold px-2.5 py-1 rounded-full"
+                                  wicket:id="sharedEntryCount">0</span>
+                            <span class="text-xs text-white/55">
+                                <wicket:message key="card.items"/>
+                            </span>
+                        </div>
+                        <span class="bg-white/20 backdrop-blur-sm text-white text-xs
+                                     font-medium px-2.5 py-1 rounded-full"
+                              wicket:id="sharedRole">Editor</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- Create List Modal -->
     <dialog id="createListModal" class="modal">
@@ -140,7 +186,7 @@
             </h3>
             <form wicket:id="shareForm">
                 <div wicket:id="shareFeedback" class="alert alert-error mb-4 text-sm rounded-xl"></div>
-                <div class="form-control mb-7">
+                <div class="form-control mb-4">
                     <label class="label pb-1.5">
                         <span class="label-text font-semibold text-base-content/70">
                             <wicket:message key="form.username"/>
@@ -150,6 +196,17 @@
                     <input type="text" wicket:id="username" required
                            class="input input-bordered w-full rounded-xl
                                   focus:border-violet-400 focus:outline-none"/>
+                </div>
+                <div class="form-control mb-7">
+                    <label class="label pb-1.5">
+                        <span class="label-text font-semibold text-base-content/70">
+                            <wicket:message key="form.role"/>
+                            <span class="text-red-500 ml-0.5">*</span>
+                        </span>
+                    </label>
+                    <select wicket:id="role"
+                            class="select select-bordered w-full rounded-xl
+                                   focus:border-violet-400 focus:outline-none"></select>
                 </div>
                 <div class="modal-action mt-0 gap-3">
                     <button type="button" class="btn btn-ghost rounded-xl"
