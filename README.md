@@ -29,7 +29,16 @@ Apache Wicket is a component-based web framework that keeps all UI logic in plai
 
 1. Provide a PostgreSQL database and an OAuth2/OIDC provider.
 2. Configure the connection and OAuth2 client credentials in `application.properties` or via environment variables.
-3. Run:
+3. Install Node dependencies and start the Tailwind CSS watcher:
+
+```bash
+npm install
+npx @tailwindcss/cli -i ./input.css -o ./src/main/resources/static/css/output.css --watch
+```
+
+The watcher scans your source files for Tailwind class names and rebuilds `output.css` on every change. Keep it running in a separate terminal while developing.
+
+4. Run:
 
 ```bash
 ./gradlew bootRun

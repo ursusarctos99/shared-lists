@@ -6,8 +6,6 @@ import de.sollfrank.sharedlists.pages.ListDetailPage;
 import de.sollfrank.sharedlists.pages.MessagesPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
-import org.apache.wicket.csp.CSPDirective;
-import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -31,6 +29,7 @@ public class WicketApplication extends WebApplication {
     public void init() {
         super.init();
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+        getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         mountPage("/lists/${id}", ListDetailPage.class);
         mountPage("/messages", MessagesPage.class);
