@@ -31,7 +31,6 @@ public class MessagesPage extends LayoutPage {
         add(new BookmarkablePageLink<>("backLink", HomePage.class));
 
         SimpleUser currentUser = SharedListsSession.get().getUser().orElseThrow();
-        String currentEmail = currentUser.email();
         UUID currentUserId = UUID.fromString(currentUser.id());
 
         // ── Received invites ──────────────────────────────────────────────
@@ -42,7 +41,7 @@ public class MessagesPage extends LayoutPage {
                 new LoadableDetachableModel<>() {
                     @Override
                     protected List<InviteSummary> load() {
-                        return sharedListService.getReceivedInvites(currentEmail);
+                        return sharedListService.getReceivedInvites(currentUserId);
                     }
                 };
 
@@ -58,7 +57,7 @@ public class MessagesPage extends LayoutPage {
             protected void populateItem(ListItem<InviteSummary> item) {
                 InviteSummary invite = item.getModelObject();
                 item.add(new Label("receivedListTitle", invite.listTitle()));
-                item.add(new Label("receivedInvitedBy", invite.invitedByName()));
+                item.add(new Label("receivedInvitedBy", invite.invitedByDisplayName()));
                 item.add(new Label("receivedRole", invite.role().name().toLowerCase()));
 
                 boolean isPending = invite.status() == InviteStatus.PENDING;
@@ -68,7 +67,7 @@ public class MessagesPage extends LayoutPage {
                 actions.add(new AjaxLink<Void>("acceptLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        sharedListService.acceptInvite(invite.id(), currentEmail);
+                        sharedListService.acceptInvite(invite.id());
                         receivedModel.detach();
                         target.add(receivedContainer);
                     }
@@ -116,7 +115,7 @@ public class MessagesPage extends LayoutPage {
             protected void populateItem(ListItem<InviteSummary> item) {
                 InviteSummary invite = item.getModelObject();
                 item.add(new Label("sentListTitle", invite.listTitle()));
-                item.add(new Label("sentInviteeEmail", invite.inviteeEmail()));
+                item.add(new Label("sentInviteeEmail", invite.inviteeDisplayName()));
                 item.add(new Label("sentRole", invite.role().name().toLowerCase()));
                 Label statusBadge = new Label("sentStatus",
                         getString("status." + invite.status().name().toLowerCase()));

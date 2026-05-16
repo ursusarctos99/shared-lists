@@ -13,7 +13,7 @@ public interface ListInviteRepository extends JpaRepository<ListInvite, UUID> {
 
     @Query("""
             SELECT new de.sollfrank.sharedlists.model.dto.InviteSummary(
-                i.id, i.list.id, i.list.title, i.inviteeEmail, i.invitedByName,
+                i.id, i.list.id, i.list.title, i.invitee.displayName, i.invitedBy.displayName,
                 i.role, i.status, i.createdAt)
             FROM ListInvite i
             WHERE i.invitedBy.id = :userId
@@ -23,11 +23,11 @@ public interface ListInviteRepository extends JpaRepository<ListInvite, UUID> {
 
     @Query("""
             SELECT new de.sollfrank.sharedlists.model.dto.InviteSummary(
-                i.id, i.list.id, i.list.title, i.inviteeEmail, i.invitedByName,
+                i.id, i.list.id, i.list.title, i.invitee.displayName, i.invitedBy.displayName,
                 i.role, i.status, i.createdAt)
             FROM ListInvite i
-            WHERE i.inviteeEmail = :email
+            WHERE i.invitee.id = :userId
             ORDER BY i.createdAt DESC
             """)
-    List<InviteSummary> findReceivedSummariesByEmail(@Param("email") String email);
+    List<InviteSummary> findReceivedSummariesByUserId(@Param("userId") UUID userId);
 }

@@ -186,7 +186,7 @@ public class HomePage extends LayoutPage {
                 sharedListService.putList(formModel);
                 formModel.setTitle(null);
                 formModel.setDescription(null);
-                target.add(listContainer, pager);
+                target.add(createForm, listContainer, pager);
                 target.appendJavaScript("document.getElementById('createListModal').close()");
             }
 
@@ -238,12 +238,9 @@ public class HomePage extends LayoutPage {
         shareForm.add(new AjaxSubmitLink("shareSubmit", shareForm) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                String currentDisplayName = SharedListsSession.get().getUser()
-                        .map(SimpleUser::displayName).orElse("Unknown");
                 try {
                     sharedListService.inviteUser(selectedListId.getObject(),
-                            inviteFormModel.getUsername(), currentDisplayName,
-                            inviteFormModel.getRole());
+                            inviteFormModel.getUsername(), inviteFormModel.getRole());
                     inviteFormModel.setUsername(null);
                     target.add(shareForm);
                     target.appendJavaScript("document.getElementById('shareModal').close()");

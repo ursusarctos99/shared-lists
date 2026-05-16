@@ -11,8 +11,8 @@ public record InviteSummary(
         UUID id,
         UUID listId,
         String listTitle,
-        String inviteeEmail,
-        String invitedByName,
+        String inviteeDisplayName,
+        String invitedByDisplayName,
         ListRole role,
         InviteStatus status,
         Instant createdAt

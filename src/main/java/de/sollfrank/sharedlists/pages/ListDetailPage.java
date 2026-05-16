@@ -1,5 +1,6 @@
 package de.sollfrank.sharedlists.pages;
 
+import de.sollfrank.sharedlists.SharedListsSession;
 import de.sollfrank.sharedlists.model.ListEntry;
 import de.sollfrank.sharedlists.model.SharedList;
 import de.sollfrank.sharedlists.model.forms.ListEntryForm;
@@ -24,7 +25,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -48,6 +48,11 @@ public class ListDetailPage extends LayoutPage {
         } catch (Exception e) {
             throw new RestartResponseException(HomePage.class);
         }
+
+        UUID currentUserId = SharedListsSession.get().getUser()
+                .map(u -> UUID.fromString(u.id()))
+                .orElse(null);
+        boolean canEdit = sharedListService.canEdit(listId, currentUserId);
 
         SharedList list = sharedListService.getList(listId);
 
@@ -95,14 +100,17 @@ public class ListDetailPage extends LayoutPage {
                 urlLink.setVisible(entry.getUrl() != null && !entry.getUrl().isBlank());
                 item.add(urlLink);
 
-                item.add(new AjaxLink<Void>("deleteEntryLink") {
+                AjaxLink<Void> deleteLink = new AjaxLink<>("deleteEntryLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
+                        if (!canEdit) return;
                         listEntryService.deleteEntry(entryId);
                         entriesModel.detach();
                         target.add(entriesContainer);
                     }
-                });
+                };
+                deleteLink.setVisible(canEdit);
+                item.add(deleteLink);
             }
         };
         entryList.setReuseItems(false);
@@ -111,6 +119,10 @@ public class ListDetailPage extends LayoutPage {
         Form<Void> entriesForm = new Form<>("entriesForm");
         entriesForm.add(entriesContainer);
         add(entriesForm);
+
+        WebMarkupContainer addEntryButton = new WebMarkupContainer("addEntryButton");
+        addEntryButton.setVisible(canEdit);
+        add(addEntryButton);
 
         // Add-entry modal form
         ListEntryForm formModel = new ListEntryForm();
@@ -136,7 +148,7 @@ public class ListDetailPage extends LayoutPage {
                 formModel.setTitle(null);
                 formModel.setUrl(null);
                 entriesModel.detach();
-                target.add(entriesContainer);
+                target.add(addEntryForm, entriesContainer);
                 target.appendJavaScript("document.getElementById('addEntryModal').close()");
             }
 
@@ -146,6 +158,7 @@ public class ListDetailPage extends LayoutPage {
             }
         });
         addEntryForm.setOutputMarkupId(true);
+        addEntryForm.setVisible(canEdit);
         add(addEntryForm);
     }
 }

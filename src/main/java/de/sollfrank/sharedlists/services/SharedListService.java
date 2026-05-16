@@ -60,15 +60,14 @@ public class SharedListService {
     }
 
     @Transactional
-    public void inviteUser(UUID listId, String username, String invitedByName, ListRole role) {
+    public void inviteUser(UUID listId, String username, ListRole role) {
         User invitee = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
         SharedList list = sharedListRepository.findById(listId)
                 .orElseThrow(() -> new EntityNotFoundException("SharedList not found: " + listId));
         ListInvite invite = new ListInvite();
         invite.setList(list);
-        invite.setInvitedByName(invitedByName);
-        invite.setInviteeEmail(invitee.getEmail());
+        invite.setInvitee(invitee);
         invite.setRole(role);
         invite.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS));
         listInviteRepository.save(invite);
@@ -82,21 +81,27 @@ public class SharedListService {
         return listInviteRepository.findSentSummariesByUserId(userId);
     }
 
-    public List<InviteSummary> getReceivedInvites(String email) {
-        return listInviteRepository.findReceivedSummariesByEmail(email);
+    public boolean canEdit(UUID listId, UUID userId) {
+        if (userId == null) return false;
+        if (sharedListRepository.existsByIdAndOwnerId(listId, userId)) return true;
+        return listShareRepository.findByListIdAndUserId(listId, userId)
+                .map(share -> share.getRole() == ListRole.EDITOR)
+                .orElse(false);
+    }
+
+    public List<InviteSummary> getReceivedInvites(UUID userId) {
+        return listInviteRepository.findReceivedSummariesByUserId(userId);
     }
 
     @Transactional
-    public void acceptInvite(UUID inviteId, String inviteeEmail) {
+    public void acceptInvite(UUID inviteId) {
         ListInvite invite = listInviteRepository.findById(inviteId)
                 .orElseThrow(() -> new EntityNotFoundException("Invite not found: " + inviteId));
-        User user = userRepository.findByEmail(inviteeEmail)
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + inviteeEmail));
         invite.setStatus(InviteStatus.ACCEPTED);
         invite.setAcceptedAt(Instant.now());
         ListShare share = new ListShare();
         share.setList(invite.getList());
-        share.setUser(user);
+        share.setUser(invite.getInvitee());
         share.setRole(invite.getRole());
         listShareRepository.save(share);
     }

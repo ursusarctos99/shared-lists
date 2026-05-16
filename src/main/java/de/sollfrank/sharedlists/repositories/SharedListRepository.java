@@ -40,4 +40,6 @@ public interface SharedListRepository extends JpaRepository<SharedList, UUID> {
             ORDER BY sl.title ASC
             """)
     List<SharedWithMeSummary> findSharedWithUser(@Param("userId") UUID userId);
+
+    boolean existsByIdAndOwnerId(UUID listId, UUID ownerId);
 }

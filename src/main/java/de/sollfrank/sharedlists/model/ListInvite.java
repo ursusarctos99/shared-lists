@@ -26,11 +26,9 @@ public class ListInvite {
     @JoinColumn(name = "invited_by", nullable = false, updatable = false)
     private User invitedBy;
 
-    @Column(name = "invited_by_name", nullable = false)
-    private String invitedByName;
-
-    @Column(name = "invitee_email", nullable = false)
-    private String inviteeEmail;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "invitee_id", nullable = false, updatable = false)
+    private User invitee;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -58,11 +56,8 @@ public class ListInvite {
     public User getInvitedBy() { return invitedBy; }
     public void setInvitedBy(User invitedBy) { this.invitedBy = invitedBy; }
 
-    public String getInvitedByName() { return invitedByName; }
-    public void setInvitedByName(String invitedByName) { this.invitedByName = invitedByName; }
-
-    public String getInviteeEmail() { return inviteeEmail; }
-    public void setInviteeEmail(String inviteeEmail) { this.inviteeEmail = inviteeEmail; }
+    public User getInvitee() { return invitee; }
+    public void setInvitee(User invitee) { this.invitee = invitee; }
 
     public ListRole getRole() { return role; }
     public void setRole(ListRole role) { this.role = role; }
