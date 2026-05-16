@@ -4,8 +4,7 @@
 
     <a wicket:id="backLink"
        class="inline-flex items-center gap-1.5 text-sm font-semibold
-              text-base-content/40 hover:text-base-content
-              transition-colors duration-150 mb-8">
+              text-base-content/60 mb-8">
         ← <wicket:message key="back"/>
     </a>
 
@@ -27,10 +26,10 @@
                     <wicket:message key="inbox.empty"/>
                 </div>
                 <div wicket:id="receivedList"
-                     class="flex items-center gap-4 bg-white rounded-2xl
+                     class="flex flex-col gap-3 sm:flex-row sm:items-center bg-white rounded-2xl
                             shadow-sm ring-1 ring-black/[0.05] px-5 py-4">
                     <div class="flex-1 min-w-0">
-                        <div class="font-semibold text-base-content truncate"
+                        <div class="font-semibold text-base-content"
                              wicket:id="receivedListTitle">List Title</div>
                         <div class="text-sm text-base-content/50 mt-0.5">
                             <wicket:message key="invited.by"/>
@@ -40,17 +39,17 @@
                             <span wicket:id="receivedRole">editor</span>
                         </div>
                     </div>
-                    <div wicket:id="receivedActions" class="flex gap-2 shrink-0">
+                    <div wicket:id="receivedActions" class="flex gap-2">
                         <a wicket:id="acceptLink"
-                           class="btn btn-success btn-sm rounded-xl">
+                           class="btn btn-success btn-sm rounded-xl flex-1 sm:flex-none">
                             <wicket:message key="action.accept"/>
                         </a>
                         <a wicket:id="rejectLink"
-                           class="btn btn-error btn-outline btn-sm rounded-xl">
+                           class="btn btn-error btn-outline btn-sm rounded-xl flex-1 sm:flex-none">
                             <wicket:message key="action.reject"/>
                         </a>
                     </div>
-                    <span wicket:id="receivedStatus" class="badge shrink-0">pending</span>
+                    <span wicket:id="receivedStatus" class="badge self-start sm:self-auto">pending</span>
                 </div>
             </div>
         </section>
@@ -67,10 +66,10 @@
                     <wicket:message key="outbox.empty"/>
                 </div>
                 <div wicket:id="sentList"
-                     class="flex items-center gap-4 bg-white rounded-2xl
+                     class="flex flex-col gap-2 sm:flex-row sm:items-center bg-white rounded-2xl
                             shadow-sm ring-1 ring-black/[0.05] px-5 py-4">
                     <div class="flex-1 min-w-0">
-                        <div class="font-semibold text-base-content truncate"
+                        <div class="font-semibold text-base-content"
                              wicket:id="sentListTitle">List Title</div>
                         <div class="text-sm text-base-content/50 mt-0.5">
                             <wicket:message key="to"/>
@@ -80,7 +79,7 @@
                             <span wicket:id="sentRole">editor</span>
                         </div>
                     </div>
-                    <span wicket:id="sentStatus" class="badge shrink-0">pending</span>
+                    <span wicket:id="sentStatus" class="badge self-start sm:self-auto">pending</span>
                 </div>
             </div>
         </section>

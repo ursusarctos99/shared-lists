@@ -3,21 +3,19 @@
 <wicket:extend>
 
     <!-- Header -->
-    <div class="flex items-start justify-between mb-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-8">
         <div>
             <a wicket:id="backLink"
                class="inline-flex items-center gap-1.5 text-sm font-semibold
-                      text-base-content/40 hover:text-base-content
-                      transition-colors duration-150 mb-4">
+                      text-base-content/60 mb-4">
                 ← <wicket:message key="back"/>
             </a>
             <h2 class="text-3xl font-extrabold tracking-tight text-base-content"
                 wicket:id="listTitle">List Title</h2>
             <p class="text-base-content/50 mt-1.5 text-sm" wicket:id="listDescription">Description</p>
         </div>
-        <button class="btn btn-primary rounded-2xl px-6 font-bold mt-10
+        <button class="btn btn-primary rounded-2xl px-6 font-bold sm:mt-10
                        shadow-[0_6px_0_rgba(79,0,229,0.30)]
-                       hover:shadow-[0_3px_0_rgba(79,0,229,0.30)] hover:translate-y-[3px]
                        active:shadow-none active:translate-y-[6px]
                        transition-all duration-75"
                 onclick="document.getElementById('addEntryModal').showModal()">
@@ -30,24 +28,17 @@
         <div wicket:id="entriesContainer" class="flex flex-col gap-3">
             <div wicket:id="entryList"
                  class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-white
-                        shadow-[0_2px_12px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.04)]
-                        hover:shadow-[0_8px_28px_rgba(0,0,0,0.10),0_0_0_1px_rgba(0,0,0,0.06)]
-                        hover:-translate-y-0.5
-                        transition-all duration-150 group">
+                        shadow-[0_2px_12px_rgba(0,0,0,0.06),0_0_0_1px_rgba(0,0,0,0.04)]">
                 <input type="checkbox" wicket:id="done"
                        class="checkbox checkbox-primary shrink-0"/>
                 <span class="flex-1 font-medium text-base-content"
                       wicket:id="entryTitle">Entry title</span>
                 <a wicket:id="url" target="_blank" rel="noopener noreferrer"
-                   class="btn btn-ghost btn-xs rounded-lg
-                          text-base-content/30 hover:text-violet-600 hover:bg-violet-50
-                          opacity-0 group-hover:opacity-100
-                          transition-all duration-150">↗</a>
+                   class="btn btn-ghost btn-xs rounded-lg text-base-content/40
+                          active:bg-violet-50 active:text-violet-600">↗</a>
                 <a wicket:id="deleteEntryLink"
-                   class="btn btn-ghost btn-xs rounded-lg
-                          text-base-content/30 hover:text-red-500 hover:bg-red-50
-                          opacity-0 group-hover:opacity-100
-                          transition-all duration-150">✕</a>
+                   class="btn btn-ghost btn-xs rounded-lg text-base-content/40
+                          active:bg-red-50 active:text-red-500">✕</a>
             </div>
         </div>
     </form>
@@ -90,7 +81,6 @@
                     <a wicket:id="submit"
                        class="btn btn-primary rounded-xl font-bold
                               shadow-[0_4px_0_rgba(79,0,229,0.30)]
-                              hover:shadow-[0_2px_0_rgba(79,0,229,0.30)] hover:translate-y-[2px]
                               active:shadow-none active:translate-y-[4px]
                               transition-all duration-75">
                         <wicket:message key="form.add"/>

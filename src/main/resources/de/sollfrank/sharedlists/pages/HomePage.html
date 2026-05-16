@@ -7,7 +7,6 @@
         <h2 class="text-3xl font-extrabold tracking-tight text-base-content" wicket:id="heading">Welcome!</h2>
         <button class="btn btn-primary rounded-2xl px-6 font-bold
                        shadow-[0_6px_0_rgba(79,0,229,0.30)]
-                       hover:shadow-[0_3px_0_rgba(79,0,229,0.30)] hover:translate-y-[3px]
                        active:shadow-none active:translate-y-[6px]
                        transition-all duration-75"
                 onclick="document.getElementById('createListModal').showModal()">
@@ -24,10 +23,7 @@
     <div wicket:id="listContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div wicket:id="listView"
              class="card relative overflow-hidden rounded-2xl cursor-pointer
-                    shadow-[0_4px_20px_rgba(0,0,0,0.12)]
-                    hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]
-                    hover:-translate-y-2
-                    transition-all duration-200 ease-out group">
+                    shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
 
             <div class="absolute inset-x-0 top-0 h-2/5
                         bg-gradient-to-b from-white/30 to-transparent
@@ -39,9 +35,7 @@
             <a wicket:id="shareLink"
                class="absolute top-3 right-11 z-30
                       w-7 h-7 flex items-center justify-center rounded-xl
-                      text-white/60 hover:text-white hover:bg-white/20
-                      opacity-0 group-hover:opacity-100
-                      transition-all duration-150">
+                      text-white/65 active:text-white active:bg-white/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <circle cx="18" cy="5" r="3" stroke="currentColor" fill="none"/>
                     <circle cx="6" cy="12" r="3" stroke="currentColor" fill="none"/>
@@ -54,12 +48,11 @@
             <a wicket:id="deleteListLink"
                class="absolute top-3 right-3 z-30
                       w-7 h-7 flex items-center justify-center rounded-xl
-                      text-white/60 hover:text-white hover:bg-white/20
-                      opacity-0 group-hover:opacity-100
-                      transition-all duration-150 text-base leading-none">✕</a>
+                      text-white/65 active:text-white active:bg-white/20
+                      text-base leading-none">✕</a>
 
             <a wicket:id="detailLink"
-               class="card-body block relative z-20 text-white hover:text-white">
+               class="card-body block relative z-20 text-white">
                 <h3 class="card-title text-white drop-shadow-sm mb-1 line-clamp-1"
                     wicket:id="title">Title</h3>
                 <p class="text-sm text-white/65 flex-1 line-clamp-2 min-h-10"
@@ -73,9 +66,7 @@
                             <wicket:message key="card.items"/>
                         </span>
                     </div>
-                    <span class="text-white/35 group-hover:text-white/75
-                                 group-hover:translate-x-1
-                                 transition-all duration-150 text-xl leading-none">→</span>
+                    <span class="text-white/55 text-xl leading-none">→</span>
                 </div>
             </a>
         </div>
@@ -92,10 +83,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div wicket:id="sharedView"
                  class="card relative overflow-hidden rounded-2xl cursor-pointer
-                        shadow-[0_4px_20px_rgba(0,0,0,0.12)]
-                        hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]
-                        hover:-translate-y-2
-                        transition-all duration-200 ease-out group">
+                        shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
 
                 <div class="absolute inset-x-0 top-0 h-2/5
                             bg-gradient-to-b from-white/30 to-transparent
@@ -105,7 +93,7 @@
                             pointer-events-none z-10 rounded-b-2xl"></div>
 
                 <a wicket:id="sharedDetailLink"
-                   class="card-body block relative z-20 text-white hover:text-white">
+                   class="card-body block relative z-20 text-white">
                     <h3 class="card-title text-white drop-shadow-sm mb-1 line-clamp-1"
                         wicket:id="sharedTitle">Title</h3>
                     <p class="text-sm text-white/65 flex-1 line-clamp-2 min-h-10"
@@ -166,7 +154,6 @@
                     <a wicket:id="submit"
                        class="btn btn-primary rounded-xl font-bold
                               shadow-[0_4px_0_rgba(79,0,229,0.30)]
-                              hover:shadow-[0_2px_0_rgba(79,0,229,0.30)] hover:translate-y-[2px]
                               active:shadow-none active:translate-y-[4px]
                               transition-all duration-75">
                         <wicket:message key="form.create"/>
@@ -216,7 +203,6 @@
                     <a wicket:id="shareSubmit"
                        class="btn btn-primary rounded-xl font-bold
                               shadow-[0_4px_0_rgba(79,0,229,0.30)]
-                              hover:shadow-[0_2px_0_rgba(79,0,229,0.30)] hover:translate-y-[2px]
                               active:shadow-none active:translate-y-[4px]
                               transition-all duration-75">
                         <wicket:message key="share.submit"/>
